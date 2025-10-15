@@ -30,12 +30,11 @@ phases:
       - echo "Writing imagedefinitions.json for CodePipeline..."
       - printf '[{"name":"backend","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 
-      # ✅ Create the artifact output folder
-      - mkdir -p ../build_output
+    
+      - mkdir -p build_output
+      - cp imagedefinitions.json Dockerfile package*.json contacts.json build_output/
+      - cp ../appspec.yml ../compose.yml build_output/ || true
 
-      # ✅ Copy files properly from backend and root
-      - cp imagedefinitions.json Dockerfile package*.json contacts.json ../build_output/
-      - cp ../appspec.yml ../compose.yml ../build_output/ || true
 
 artifacts:
   base-directory: ../build_output
