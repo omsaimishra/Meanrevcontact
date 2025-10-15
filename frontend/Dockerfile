@@ -2,17 +2,22 @@
 FROM public.ecr.aws/docker/library/node:20-alpine AS build
 WORKDIR /app
 
-# Copy and install dependencies
+# Copy dependency files first (cache friendly)
 COPY package*.json ./
+
+# Install dependencies (include dev)
 RUN npm install --include=dev
 
-# Copy rest of project files
+# Copy source code
 COPY . .
 
-# Ensure permissions are correct (helps when cache layers are reused)
+# Fix permissions
 RUN chmod -R 755 /app/node_modules
 
-# Run Vite build directly through Node (avoids Alpine permission issue)
+# Rebuild esbuild to match Alpine environment
+RUN npm rebuild esbuild
+
+# Run Vite build directly via Node to avoid shell permission issues
 RUN node ./node_modules/vite/bin/vite.js build
 
 # ---- Runtime Stage ----
