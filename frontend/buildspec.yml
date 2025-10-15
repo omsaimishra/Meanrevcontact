@@ -13,9 +13,9 @@ phases:
 
   build:
     commands:
-      - echo "🏗️ Building the Docker image..."
+      - echo "🏗️ Building the Docker image from ./frontend..."
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+      - docker build -t $REPOSITORY_URI:$IMAGE_TAG ./frontend
       - echo "🏷️ Tagging image as latest..."
       - docker tag $REPOSITORY_URI:$IMAGE_TAG $REPOSITORY_URI:latest
 
@@ -24,20 +24,19 @@ phases:
       - echo "🚀 Pushing Docker images to ECR..."
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - docker push $REPOSITORY_URI:latest
-
       - echo "📝 Writing imagedefinitions.json for CodePipeline..."
       - printf '[{"name":"frontend","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-
       - echo "📦 Preparing build artifacts..."
       - mkdir -p build_output
-      - cp imagedefinitions.json Dockerfile package*.json build_output/ || true
-      - cp ../appspec.yml ../compose.yml build_output/ || true
+      - cp imagedefinitions.json frontend/Dockerfile frontend/package*.json build_output/ || true
+      - echo "✅ Listing build_output contents:"
       - ls -R build_output
 
 artifacts:
   base-directory: build_output
   files:
     - '**/*'
+
 
 
 
