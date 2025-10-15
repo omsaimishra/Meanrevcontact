@@ -11,10 +11,10 @@ RUN npm ci
 # Copy everything else
 COPY . .
 
-# --- 🔧 FIX: Ensure vite is executable ---
+# FIX: Ensure vite is executable 
 RUN chmod -R 755 node_modules/.bin
 
-# --- 🔧 FIX: Run vite via Node directly (bypasses shell script) ---
+#  FIX: Run vite via Node directly (bypasses shell script) ---
 RUN node ./node_modules/vite/bin/vite.js build
 
 # ---- Runtime Stage ----
