@@ -23,11 +23,12 @@ phases:
   post_build:
     commands:
       - echo "Pushing Docker images to ECR..."
+      - cd frontend
+      - mkdir -p build_output
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - docker push $REPOSITORY_URI:latest
       - echo "Writing imagedefinitions.json for CodePipeline..."
       - printf '[{"name":"frontend","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - mkdir -p build_output
       - cp imagedefinitions.json Dockerfile package*.json build_output/
       - cp ../appspec.yml ../compose.yml build_output/ || true
       - echo "Listing build_output contents..."
@@ -37,4 +38,5 @@ artifacts:
   base-directory: frontend/build_output
   files:
     - '**/*'
+
 
