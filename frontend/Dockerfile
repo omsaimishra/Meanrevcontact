@@ -6,13 +6,14 @@ RUN npm install --include=dev
 
 COPY . .
 
-RUN chmod -R 755 node_modules/.bin && chown -R node:node /app
-USER node
+# Ensure executables and permissions
+RUN chmod -R 755 node_modules/.bin
 
-RUN npm run build
+# Run build as root via npx (fixes vite permission issue)
+RUN npx vite build
 
+# Serve static files with Nginx
 FROM public.ecr.aws/docker/library/nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
-
