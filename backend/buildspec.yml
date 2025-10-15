@@ -35,7 +35,8 @@ phases:
       - cp imagedefinitions.json Dockerfile package*.json contacts.json build_output/
       - cp ../appspec.yml ../compose.yml build_output/ || true
       - echo "Listing build_output contents for verification..."
-      - cp scripts/deploy.sh build_output/scripts/
+      - cp ../scripts/deploy.sh build_output/scripts/
+
 
       - ls -R build_output
 
