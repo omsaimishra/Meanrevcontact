@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
 // Use environment variable (works locally and in Docker)
-const API_URL = import.meta.env.VITE_API_URL=http://13.233.173.243:3901;
-
+const API_URL = import.meta.env.VITE_API_URL;
 function App() {
   const [formData, setFormData] = useState({
     name: "",
