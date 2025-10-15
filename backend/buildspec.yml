@@ -40,8 +40,9 @@ phases:
 
 
 artifacts:
-  base-directory: build_output
+  base-directory: backend/build_output
   files:
     - '**/*'
+
 
 
