@@ -34,10 +34,14 @@ phases:
       - mkdir -p build_output
       - cp imagedefinitions.json Dockerfile package*.json contacts.json build_output/
       - cp ../appspec.yml ../compose.yml build_output/ || true
+      - echo "Listing build_output contents for verification..."
+      - ls -R build_output
+
 
 
 artifacts:
+  base-directory: build_output
   files:
-    - build_output/**/*
+    - '**/*'
 
 
