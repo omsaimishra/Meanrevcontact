@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Starting Docker Compose deployment..."
+echo " Starting Docker Compose deployment..."
 
 cd /home/ubuntu/contact
 
@@ -17,4 +17,4 @@ docker-compose pull
 # Start new containers
 docker-compose up -d
 
-echo "✅ Deployment completed successfully!"
+echo " Deployment completed successfully!"
