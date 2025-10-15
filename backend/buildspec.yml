@@ -9,7 +9,7 @@ phases:
   pre_build:
     commands:
       - echo "Logging in to Amazon ECR..."
-      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 143262365667.dkr.ecr.ap-south-1.amazonaws.com
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
 
   build:
     commands:
@@ -26,10 +26,16 @@ phases:
       - docker push $REPOSITORY_URI:latest
       - echo "Writing imagedefinitions.json for CodePipeline..."
       - printf '[{"name":"backend","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - mkdir -p build_output
-      - cp appspec.yml docker-compose.yml imagedefinitions.json Dockerfile package*.json contacts.json build_output/ || true
+
+      # ✅ Create the artifact output folder
+      - mkdir -p ../build_output
+
+      # ✅ Copy files properly from backend and root
+      - cp imagedefinitions.json Dockerfile package*.json contacts.json ../build_output/
+      - cp ../appspec.yml ../compose.yml ../build_output/ || true
 
 artifacts:
-  base-directory: build_output
+  base-directory: ../build_output
   files:
     - '**/*'
+
