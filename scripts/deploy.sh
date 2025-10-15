@@ -1,12 +1,12 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 echo " Starting Docker Compose deployment..."
 
 cd /home/ubuntu/contact
 
 # Login to ECR
-aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 143262365667.dkr.ecr.ap-south-1.amazonaws.com
+aws ecr get-login-password --region ap-south-1 | sudo docker login --username AWS --password-stdin 143262365667.dkr.ecr.ap-south-1.amazonaws.com
 
 # Stop and remove old containers
 sudo docker compose down || true
