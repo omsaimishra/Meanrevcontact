@@ -1,13 +1,14 @@
 FROM node:20-alpine AS build
-
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm ci --include=dev
+RUN npm install --include=dev
+
 COPY . .
 
 RUN chmod -R 755 node_modules/.bin && chown -R node:node /app
-
 USER node
+
 RUN npm run build
 
 FROM nginx:alpine
