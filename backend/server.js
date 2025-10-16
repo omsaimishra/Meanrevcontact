@@ -47,7 +47,7 @@ app.post("/api/contact", (req, res) => {
   contacts.push(newContact);
   saveContacts(contacts);
 
-  console.log("💾 Saved contact:", newContact);
+  console.log(" Saved contact:", newContact);
   res.status(201).json({ success: true, message: "Message saved successfully!" });
 });
 
@@ -56,9 +56,9 @@ app.get("/api/contact", (req, res) => {
   res.json({ success: true, data: contacts });
 });
 
-app.get("/", (req, res) => res.send("Backend running successfully ✅"));
+app.get("/", (req, res) => res.send("Backend running successfully "));
 
-app.listen(PORT, () =>
-  console.log(`🚀 Backend running at http://localhost:${PORT}`)
-);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Backend running at http://0.0.0.0:${PORT}`);
+});
 
