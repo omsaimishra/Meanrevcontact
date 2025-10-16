@@ -10,6 +10,8 @@ RUN npm ci
 
 # Copy everything else
 COPY . .
+COPY .env .env
+
 
 # FIX: Ensure vite is executable 
 RUN chmod -R 755 node_modules/.bin
