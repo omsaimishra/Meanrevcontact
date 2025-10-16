@@ -28,7 +28,7 @@ phases:
       - printf '[{"name":"frontend","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - echo " Preparing build artifacts..."
       - mkdir -p build_output
-      - cp imagedefinitions.json frontend/Dockerfile frontend/package*.json build_output/ || true
+      - cp imagedefinitions.json frontend/Dockerfile frontend/.env frontend/package*.json build_output/ || true
       - echo " Listing build_output contents:"
       - ls -R build_output
 
