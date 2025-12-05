@@ -1,0 +1,54 @@
+steps:
+  # Build Backend
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "us-central1-docker.pkg.dev/$meanrevcontact/meanrepo/backend:$SHORT_SHA",
+        "./backend"
+      ]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "us-central1-docker.pkg.dev/$meanrevcontact/meanrepo/backend:$SHORT_SHA"
+      ]
+
+  # Build Frontend
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "us-central1-docker.pkg.dev/$meanrevcontact/meanrepo/frontend:$SHORT_SHA",
+        "./frontend"
+      ]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "us-central1-docker.pkg.dev/$meanrevcontact/meanrepo/frontend:$SHORT_SHA"
+      ]
+
+  # SSH → Update Compose → Pull → Restart Services
+  - name: "gcr.io/cloud-builders/gcloud"
+    entrypoint: "bash"
+    args:
+      - -c
+      - |
+        gcloud compute ssh meanrev-app-server --zone="asia-south1-b" --command "
+          cd /var/www/app &&
+          sed -i \"s/latest/$SHORT_SHA/g\" docker-compose.yml &&
+          docker compose pull &&
+          docker compose down &&
+          docker compose up -d
+        "
+
+images:
+  - "us-central1-docker.pkg.dev/$meanrevcontact/meanrepo/backend:$SHORT_SHA"
+  - "us-central1-docker.pkg.dev/$meanrevcontact/meanrepo/frontend:$SHORT_SHA"
+
+timeout: "1800s"
