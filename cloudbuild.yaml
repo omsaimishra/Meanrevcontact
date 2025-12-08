@@ -37,12 +37,13 @@ steps:
         "asia-south1-docker.pkg.dev/meanrevcontact/meanrevrepo/frontend:$SHORT_SHA"
       ]
 
-  # SSH → Update Compose → Pull → Restart Services
+  # SSH → Upload compose.yml → Update tags → Pull → Restart Services
   - name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
       - -c
       - |
+        gcloud compute scp compose.yml meanrev-app-server:/var/www/app/compose.yml --zone="asia-south1-b"
         gcloud compute ssh meanrev-app-server --zone="asia-south1-b" --command "
           cd /var/www/app &&
           sed -i \"s/latest/$SHORT_SHA/g\" compose.yml &&
