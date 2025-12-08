@@ -9,7 +9,7 @@ steps:
       [
         "build",
         "-t",
-        "us-central1-docker.pkg.dev/meanrevcontact/meanrepo/backend:$SHORT_SHA",
+        "us-central1-docker.pkg.dev/meanrevcontact/meanrevrepo/backend:$SHORT_SHA",
         "./backend"
       ]
 
@@ -17,7 +17,7 @@ steps:
     args:
       [
         "push",
-        "us-central1-docker.pkg.dev/meanrevcontact/meanrepo/backend:$SHORT_SHA"
+        "us-central1-docker.pkg.dev/meanrevcontact/meanrevrepo/backend:$SHORT_SHA"
       ]
 
   # Build Frontend
@@ -26,7 +26,7 @@ steps:
       [
         "build",
         "-t",
-        "us-central1-docker.pkg.dev/meanrevcontact/meanrepo/frontend:$SHORT_SHA",
+        "us-central1-docker.pkg.dev/meanrevcontact/meanrevrepo/frontend:$SHORT_SHA",
         "./frontend"
       ]
 
@@ -34,7 +34,7 @@ steps:
     args:
       [
         "push",
-        "us-central1-docker.pkg.dev/meanrevcontact/meanrepo/frontend:$SHORT_SHA"
+        "us-central1-docker.pkg.dev/meanrevcontact/meanrevrepo/frontend:$SHORT_SHA"
       ]
 
   # SSH → Update Compose → Pull → Restart Services
@@ -52,7 +52,7 @@ steps:
         "
 
 images:
-  - "us-central1-docker.pkg.dev/meanrevcontact/meanrepo/backend:$SHORT_SHA"
-  - "us-central1-docker.pkg.dev/meanrevcontact/meanrepo/frontend:$SHORT_SHA"
+  - "us-central1-docker.pkg.dev/meanrevcontact/meanrevrepo/backend:$SHORT_SHA"
+  - "us-central1-docker.pkg.dev/meanrevcontact/meanrevrepo/frontend:$SHORT_SHA"
 
 timeout: "1800s"
