@@ -1,3 +1,7 @@
+serviceAccount: projects/$meanrevcontact/serviceAccounts/877026809152-compute@developer.gserviceaccount.com
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+
 steps:
   # Build Backend
   - name: "gcr.io/cloud-builders/docker"
