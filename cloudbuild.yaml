@@ -45,7 +45,7 @@ steps:
       - |
         gcloud compute ssh meanrev-app-server --zone="asia-south1-b" --command "
           cd /var/www/app &&
-          sed -i \"s/latest/$SHORT_SHA/g\" docker-compose.yml &&
+          sed -i \"s/latest/$SHORT_SHA/g\" compose.yml &&
           docker compose pull &&
           docker compose down &&
           docker compose up -d
