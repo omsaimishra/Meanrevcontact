@@ -1,4 +1,5 @@
 serviceAccount: projects/meanrevcontact/serviceAccounts/877026809152-compute@developer.gserviceaccount.com
+
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 
@@ -37,19 +38,28 @@ steps:
         "asia-south1-docker.pkg.dev/meanrevcontact/meanrevrepo/frontend:$SHORT_SHA"
       ]
 
-  # SSH → Upload compose.yml → Update tags → Pull → Restart Services
+  # Deploy to VM
   - name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
       - -c
       - |
+        echo "📦 Copying compose.yml file…"
         gcloud compute scp compose.yml meanrev-app-server:/var/www/app/compose.yml --zone="asia-south1-b"
+
+        echo "🚀 Deploying update…"
         gcloud compute ssh meanrev-app-server --zone="asia-south1-b" --command "
           cd /var/www/app &&
+          echo '🔐 Authenticating Artifact Registry...' &&
+          gcloud auth configure-docker asia-south1-docker.pkg.dev --quiet &&
+          echo '📝 Updating version tags...' &&
           sed -i \"s/latest/$SHORT_SHA/g\" compose.yml &&
+          echo '⬇️ Pulling new images...' &&
           docker compose pull &&
+          echo '♻ Restarting services...' &&
           docker compose down &&
-          docker compose up -d
+          docker compose up -d &&
+          echo '✅ Deployment completed successfully!'
         "
 
 images:
