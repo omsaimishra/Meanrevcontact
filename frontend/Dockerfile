@@ -1,5 +1,5 @@
 # ---- Build Stage ----
-FROM public.ecr.aws/docker/library/node:20-slim AS build
+FROM node:20-slim AS build
 WORKDIR /app
 
 # Copy package files first (better cache)
